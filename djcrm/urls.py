@@ -23,5 +23,6 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='landing.html')),
     path('users/', include('users.urls', namespace='users')),
     path('leads/', include('leads.urls', namespace='leads')),
+    path('agents/', include('agents.urls', namespace='agents')),
 ]
 

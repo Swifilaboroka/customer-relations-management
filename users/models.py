@@ -23,7 +23,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 # organization
 class UserProfile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='user_profile')
 
     def __str__(self):
         return self.user.email

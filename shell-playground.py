@@ -40,3 +40,6 @@ print(User.objects.all())
 
 # print(Lead.objects.all())
 # print(Lead.objects.get(pk=9))
+agent = Agent.objects.filter(user__email='epicchungus@gmail.com').first()
+print(agent)
+print(agent.organization)
