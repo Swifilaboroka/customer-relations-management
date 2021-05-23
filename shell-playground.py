@@ -1,5 +1,5 @@
 # run in django shell
-# exec(open('kuat.py').read())
+# exec(open('shell-playground.py').read())
 
 from leads.models import Lead, Agent
 from django.contrib.auth import get_user_model
@@ -38,5 +38,5 @@ print(User.objects.all())
 # from django.urls import reverse
 # print(reverse("hahahahahanamespace:list"))
 
-print(Lead.objects.all())
-print(Lead.objects.get(pk=9))
+# print(Lead.objects.all())
+# print(Lead.objects.get(pk=9))
