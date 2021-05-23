@@ -1,6 +1,9 @@
+from django.urls.base import reverse
+from django.views.generic.edit import DeleteView, UpdateView
 from leads.models import Agent, Lead
 from leads.forms import LeadForm
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import ListView, CreateView
 
 
 def landing(request):
@@ -41,3 +44,32 @@ def lead_update(request, pk):
             form.save()
             return redirect('/leads')
         return render(request, 'leads/lead_update.html', {'form': form, 'lead': lead})
+
+
+class LeadListView(ListView):
+    queryset = Lead.objects.all()
+    context_object_name = 'leads'
+
+
+class LeadCreateView(CreateView):
+    template_name = 'leads/lead_create.html'
+    form_class = LeadForm
+
+    def get_success_url(self) -> str:
+        return reverse('leads:lead-list')
+
+
+class LeadUpdateView(UpdateView):
+    template_name = 'leads/lead_update.html'
+    form_class = LeadForm
+    queryset = Lead.objects.all()
+
+    def get_success_url(self) -> str:
+        return reverse('leads:lead-list')
+
+class LeadDeleteView(DeleteView):
+    queryset = Lead.objects.all()
+    template_name = 'leads/lead_delete.html'
+
+    def get_success_url(self) -> str:
+        return reverse('leads:lead-list')
