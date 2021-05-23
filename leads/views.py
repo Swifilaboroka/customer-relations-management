@@ -1,9 +1,10 @@
 from django.urls.base import reverse
 from django.views.generic.edit import DeleteView, UpdateView
-from leads.models import Agent, Lead
-from leads.forms import LeadForm
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from leads.models import Agent, Lead
+from leads.forms import LeadForm
 
 
 def landing(request):
@@ -46,12 +47,12 @@ def lead_update(request, pk):
         return render(request, 'leads/lead_update.html', {'form': form, 'lead': lead})
 
 
-class LeadListView(ListView):
+class LeadListView(LoginRequiredMixin, ListView):
     queryset = Lead.objects.all()
     context_object_name = 'leads'
 
 
-class LeadCreateView(CreateView):
+class LeadCreateView(LoginRequiredMixin, CreateView):
     template_name = 'leads/lead_create.html'
     form_class = LeadForm
 
@@ -59,7 +60,7 @@ class LeadCreateView(CreateView):
         return reverse('leads:lead-list')
 
 
-class LeadUpdateView(UpdateView):
+class LeadUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'leads/lead_update.html'
     form_class = LeadForm
     queryset = Lead.objects.all()
@@ -67,7 +68,7 @@ class LeadUpdateView(UpdateView):
     def get_success_url(self) -> str:
         return reverse('leads:lead-list')
 
-class LeadDeleteView(DeleteView):
+class LeadDeleteView(LoginRequiredMixin, DeleteView):
     queryset = Lead.objects.all()
     template_name = 'leads/lead_delete.html'
 

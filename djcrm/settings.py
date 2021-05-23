@@ -131,5 +131,10 @@ STATIC_ROOT = 'static_root'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+# login success_url
 LOGIN_REDIRECT_URL = '/leads'
+# logout success_url
 LOGOUT_REDIRECT_URL = '/users/login/'
+
+# loginrequired mixin redirects to LOGIN_URL
+LOGIN_URL = '/users/login'
