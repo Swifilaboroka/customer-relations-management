@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.db.models.signals import post_save
 
 from .managers import CustomUserManager
 
@@ -19,3 +20,17 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+# organization
+class UserProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.email
+
+
+def post_user_create_signal(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user_id=instance.id)
+
+post_save.connect(post_user_create_signal, sender=CustomUser)
