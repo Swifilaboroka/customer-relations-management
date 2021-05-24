@@ -2,9 +2,11 @@
 {% block content %}
 <section class="text-gray-600 body-font">
   <div class="container px-5 py-8 mx-auto flex flex-wrap">
-    <h1 class="text-4xl mb-4">Leads</h1>
-    <a class='hover:text-blue-500 self-center text-lg ml-auto' href="{% url 'leads:lead-create' %}">Create a new lead</a>
-    <div class="flex flex-wrap -m-4">
+    <h1 class="text-4xl mb-4 mr-auto">Leads</h1>
+    {% if user.is_organizer %}
+      <a class='hover:text-blue-500 self-center text-lg ' href="{% url 'leads:lead-create' %}">Create a new lead</a>
+    {% endif %}
+    <div class="flex flex-wrap md:w-full -m-4">
       {% for lead in leads %}
         <div class="p-4 lg:w-1/2 md:w-full">
           <div class="flex border-2 rounded-lg border-gray-200 border-opacity-50 p-8 sm:flex-row flex-col">

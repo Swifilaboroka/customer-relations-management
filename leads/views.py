@@ -1,4 +1,6 @@
+from agents.mixins import OrganizerAndLoginRequiredMixin
 from django.urls.base import reverse
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, UpdateView
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView, CreateView
@@ -10,49 +12,16 @@ from leads.forms import LeadForm
 def landing(request):
     return render(request, 'landing.html')
 
-# Create your views here.
-def lead_list(request):
-    leads = Lead.objects.all()
-    return render(request=request, template_name='leads/lead_list.html', context={'leads': leads})
-
-
-def lead_detail(request, pk):
-    lead = get_object_or_404(Lead, pk=pk)
-    return render(request=request, template_name='leads/lead_detail.html', context={"lead": lead})
-
-
-def lead_create(request):
-    # GET
-    form = LeadForm(request.POST)
-    if form.is_valid():
-        agent = Agent.objects.filter().first()
-        agent_id = agent.id
-        lead = Lead(agent_id=agent_id, **form.cleaned_data)
-        lead.save()
-        return redirect('/leads')
-    return render(request, 'leads/lead_create.html', {'form': form})
-
-
-def lead_update(request, pk):
-    # GET
-    lead = get_object_or_404(Lead, pk=pk)
-    if request.method == 'GET':
-        form = LeadForm(instance=lead)
-        return render(request, 'leads/lead_update.html', {'form': form, 'lead': lead})
-    elif request.method == 'POST':
-        form = LeadForm(instance=lead, data=request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/leads')
-        return render(request, 'leads/lead_update.html', {'form': form, 'lead': lead})
-
+class LeadDetailView(LoginRequiredMixin, DetailView):
+    queryset = Lead.objects.all()
+    template_name = 'leads/lead_detail.html'
 
 class LeadListView(LoginRequiredMixin, ListView):
     queryset = Lead.objects.all()
     context_object_name = 'leads'
 
 
-class LeadCreateView(LoginRequiredMixin, CreateView):
+class LeadCreateView(OrganizerAndLoginRequiredMixin, CreateView):
     template_name = 'leads/lead_create.html'
     form_class = LeadForm
 
@@ -60,7 +29,7 @@ class LeadCreateView(LoginRequiredMixin, CreateView):
         return reverse('leads:lead-list')
 
 
-class LeadUpdateView(LoginRequiredMixin, UpdateView):
+class LeadUpdateView(OrganizerAndLoginRequiredMixin, UpdateView):
     template_name = 'leads/lead_update.html'
     form_class = LeadForm
     queryset = Lead.objects.all()
@@ -68,7 +37,7 @@ class LeadUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self) -> str:
         return reverse('leads:lead-list')
 
-class LeadDeleteView(LoginRequiredMixin, DeleteView):
+class LeadDeleteView(OrganizerAndLoginRequiredMixin, DeleteView):
     queryset = Lead.objects.all()
     template_name = 'leads/lead_delete.html'
 
