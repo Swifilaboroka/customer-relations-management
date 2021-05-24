@@ -9,7 +9,8 @@ class LeadForm(forms.ModelForm):
             'first_name',
             'last_name',
             'age',
-            'agent'
+            'agent',
+            'organization',
             ]
 
 
