@@ -1,4 +1,4 @@
-from agents.mixins import OrganizerAndLoginRequiredMixin
+from django.core.mail import send_mail
 from django.urls.base import reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, UpdateView
@@ -7,6 +7,7 @@ from django.views.generic import ListView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from leads.models import Agent, Lead
 from leads.forms import LeadForm
+from agents.mixins import OrganizerAndLoginRequiredMixin
 
 
 def landing(request):
@@ -37,6 +38,15 @@ class LeadCreateView(OrganizerAndLoginRequiredMixin, CreateView):
 
     def get_success_url(self) -> str:
         return reverse('leads:lead-list')
+
+    def form_valid(self, form):
+        send_mail(
+            subject='A new lead has been created',
+            message='Go to the site to see the new lead',
+            from_email="test@gmail.com",
+            recipient_list=["test2@gmail.com"]
+        )
+        return super().form_valid(form)
 
 
 class LeadUpdateView(OrganizerAndLoginRequiredMixin, UpdateView):

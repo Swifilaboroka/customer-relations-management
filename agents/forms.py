@@ -1,10 +1,11 @@
+from users.models import CustomUser
 from leads.models import Agent
 from django import forms
 
 
-class AgentForm(forms.ModelForm):
+class AgentModelForm(forms.ModelForm):
     class Meta:
-        model = Agent
+        model = CustomUser
         fields = [
-            'user',
+            'email',
             ]
