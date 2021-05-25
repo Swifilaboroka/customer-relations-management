@@ -1,9 +1,11 @@
+from django.core.mail import send_mail
 from django.shortcuts import redirect
 from agents.mixins import OrganizerAndLoginRequiredMixin
 from django.urls.base import reverse
 from django.views.generic.edit import DeleteView, UpdateView
 from django.views.generic import ListView, CreateView,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from random import randint
 from leads.models import Agent
 from .forms import AgentModelForm
 
@@ -29,8 +31,15 @@ class AgentCreateView(OrganizerAndLoginRequiredMixin, CreateView):
         user = form.instance
         user.is_agent = True
         user.is_organizer = False
+        user.set_password(f"{randint(1, 10000000)}")
         user.save()
-        Agent.objects.create(user=user, organization=self.request.user.userprofile)
+        Agent.objects.create(user=user, organization=self.request.user.user_profile)
+        send_mail(
+            subject='A new lead has been created',
+            message='Go to the site to see the new lead',
+            from_email="test@gmail.com",
+            recipient_list=[user.email]
+        )
         return redirect('agents:agent-list')
 
 
