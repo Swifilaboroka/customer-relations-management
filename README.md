@@ -1,5 +1,6 @@
 # Simple CRM
-## Customer relations management system built using django built-in Jinja template engine and Session Authentication. 
+Customer relations management system built using django built-in Jinja template engine and Session Authentication. 
+
 ### An organization leader can add new agents:
 
 ![Screenshot_2021-05-27 Screenshot(1)](https://user-images.githubusercontent.com/25168308/119768211-163a4e80-beda-11eb-9796-f1b748ad5719.png)
